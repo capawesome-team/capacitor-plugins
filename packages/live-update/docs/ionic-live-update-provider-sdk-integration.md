@@ -291,12 +291,13 @@ Bundle **seed content** at each Portal's `startDir` so the first Portal can rend
 
 ## Bundle storage
 
-Provider managers share the plugin's on-disk bundle storage, but keep their own state:
+Provider managers keep their bundles in a folder of their own, apart from the bundles of the JavaScript API. There is nothing to configure and nothing to clean up by hand:
 
 - The state of a manager is scoped by its resolved app ID and channel (`<appId>` or `<appId>.<channel>`). Managers with the same app ID and channel share their state by design, so Portals that show the same web app share one bundle.
-- After a native app update (the version code on Android or `CFBundleVersion` on iOS changes), each manager forgets its synced bundle and serves the seed content until the next sync.
-- Bundles that were replaced by a sync, or dropped after an app update, are deleted the next time a manager is constructed (usually at app launch), not right after a sync, because a visible portal may still serve them. A bundle is kept as long as any manager points to it or it is the plugin's current or next bundle. Managers never delete bundles they did not sync themselves.
-- Leftovers of interrupted downloads are removed once per process at startup. Concurrent syncs or downloads of the same bundle do not fail; the bundle counts as installed.
+- A manager keeps the bundle of its last sync. For a bundle of type `manifest`, the next sync only downloads the files that changed.
+- Old bundles are deleted once per app start, when the first manager is created. A bundle that was replaced by a sync stays until then, because a visible portal may still serve it.
+- After a native app update (the version code on Android or `CFBundleVersion` on iOS changes), all managers forget their bundles and serve the seed content until the next sync. The bundles of the old version are deleted.
+- Leftovers of interrupted downloads are removed once per process at startup. Concurrent syncs or downloads of the same bundle do not fail. The bundle counts as installed.
 
 ## Verifying updates
 
@@ -306,4 +307,4 @@ Provider managers share the plugin's on-disk bundle storage, but keep their own 
 - `sync()` returns `nil`/`null` when there is nothing to report: no bundle matches the request, the bundle is unchanged, the server asked the device to wait before the next check, or the response body cannot be used.
 - `sync()` throws on network failures (offline, DNS, TLS, timeout), when the server answers the update check with an error status (for example, for an unknown app ID), and when the download or the verification of the bundle fails. The behavior is the same on Android and iOS.
 
-> Provider mode and the standalone JavaScript sync flow share the same on-disk bundle storage but use separate state: the provider state is scoped by app ID and channel, the JavaScript flow uses the plugin's `currentBundleId` / `nextBundleId`. Pick one mode per app to avoid surprises. In particular, do not enable `autoDeleteBundles` in a Federated Capacitor shell that calls `ready()`: the plugin then deletes every bundle that is not its current or next bundle, including the bundles synced by provider managers.
+> Provider mode and the standalone JavaScript sync flow keep their bundles and their state apart. `getBundles()`, `getDownloadedBundles()`, `deleteBundle()` and `autoDeleteBundles` only cover bundles that were downloaded through the JavaScript API, and a download of a manager sends no `downloadBundleProgress` event.

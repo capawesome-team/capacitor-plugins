@@ -47,8 +47,11 @@ In provider mode, an Ionic Portals host constructs `LiveUpdateIonicManager` dire
 - [ ] Verify that `sync()` installs the bundle of the channel and returns its metadata.
 - [ ] Verify that a second `sync()` without a new bundle returns no update and no error.
 - [ ] Verify that the latest app directory is restored after a restart without a sync.
-- [ ] Verify that a newer bundle replaces the current one and the old bundle is deleted when the manager is constructed again.
-- [ ] Verify that a native app update (new version code) forgets the latest app directory and deletes the old bundle.
+- [ ] Verify that a newer bundle replaces the current one and the old bundle is deleted at the next app start.
+- [ ] Verify that a second manager for the same app ID and channel, constructed in the same session after a sync, does not delete the replaced bundle.
+- [ ] Verify that a second `sync()` of a bundle of type `manifest` only downloads the files that changed.
+- [ ] Verify that a native app update (new version code) makes all managers forget their latest app directory and deletes their bundles.
+- [ ] Verify that `ready()` with `autoDeleteBundles` does not delete the bundle of a manager, and that `getBundles()` does not list it.
 - [ ] Verify that two concurrent syncs for the same app ID and channel download the bundle once and do not fail.
 - [ ] Verify that `sync()` fails with an error when the device is offline.
 - [ ] Verify that `sync()` fails with an error for an unknown app ID.

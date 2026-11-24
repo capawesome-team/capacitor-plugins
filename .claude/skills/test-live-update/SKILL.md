@@ -218,11 +218,11 @@ APP=io.ionic.portals.ecommerce scripts/device.sh ios prefs   # same for the demo
 
 On Android the provider example can be called through the WebView DevTools socket as well, which gives the exact result: `node scripts/webview-eval.mjs 'Capacitor.Plugins.IonicProviderTest.syncManager({ appId: "<app id>", channel: "<channel>" })'`. The test plugin of the example does not pass the error code on, so `code` is always `null` there.
 
-Preference keys are `CapawesomeLiveUpdateIonicProvider.lastSyncedBundleId.<key>`, `...lastVersionCode.<key>` and `...supersededBundleIds.<key>` with `<key>` = `<appId>` or `<appId>.<channel>`. Bundles live in the same directories as in standalone mode, so `scripts/device.sh <platform> bundles` works for both apps.
+Preference keys are `CapawesomeLiveUpdateIonicProvider.lastSyncedBundleId.<key>` with `<key>` = `<appId>` or `<appId>.<channel>`, and one `...lastVersionCode` for all managers. The bundles of managers live in a folder of their own. Set `BUNDLES=provider` for `scripts/device.sh` to look at it.
 
 ### Matrix
 
-Run each row on both platforms. "Log" is `scripts/example-log.sh`, "prefs" is `scripts/device.sh <platform> prefs`.
+Run each row on both platforms. "Log" is `scripts/example-log.sh`, "prefs" is `scripts/device.sh <platform> prefs`, "bundles" is `BUNDLES=provider scripts/device.sh <platform> bundles`.
 
 | Case | App | Steps | Expect |
 |------|-----|-------|--------|
@@ -230,8 +230,11 @@ Run each row on both platforms. "Log" is `scripts/example-log.sh`, "prefs" is `s
 | First sync | example | `Sync Manager` with your channel, then `Get Latest App Directory` | log shows the bundle id and a directory, `bundles` lists it, prefs hold `lastSyncedBundleId` and `lastVersionCode` |
 | Sync unchanged | example | `Sync Manager` again | log `null`, no error |
 | State restore | example | `force-stop`, `Get Latest App Directory` with `RELAUNCH=yes` | same directory, no sync |
-| New bundle | example | upload `Provider v3`, `Sync Manager`, prefs, `force-stop`, `Get Latest App Directory` | new id; before the relaunch `supersededBundleIds` holds the old id, after it the old directory and the key are gone |
-| Native update reset | example | bump the version code, reinstall, `Get Latest App Directory` | log `null`, prefs without `lastSyncedBundleId`, old bundle deleted. Only the app ID and channel of the manager that is constructed are reset |
+| New bundle | example | upload `Provider v3`, `Sync Manager`, bundles, `force-stop`, `Get Latest App Directory` | new id. Before the relaunch both bundle folders exist, after it the old one is gone |
+| Second manager | example | after the `Sync Manager` of the row above and before the `force-stop`: `Get Latest App Directory`, which constructs a second manager in the same session | the replaced bundle folder is still there |
+| Manifest update | example | a channel with a bundle of type `manifest`, `Sync Manager`, upload a second manifest bundle with few changed files, `Sync Manager` | the log of the second sync says "Downloading N of M files." with N as the number of changed files |
+| Native update reset | example | bump the version code, reinstall, `Get Latest App Directory` | log `null`, prefs without any `lastSyncedBundleId`, the bundles of all managers deleted, also of an app ID and channel that is not constructed again |
+| JS API next to a manager | example | config variant `autoDeleteBundles: true`, `Sync Manager`, then `ready()` and `getBundles()` of the JS API. On Android through `webview-eval.mjs`, on iOS with temporary buttons on the page of the example | the bundle of the manager stays, `getBundles()` does not list it |
 | Concurrent sync | example | a channel whose bundle is not on the device yet, `Sync Manager` with `TWICE=yes` | no error, both results name the same directory, one bundle directory |
 | Offline | example | `serverDomain: "10.255.255.1"` and `httpTimeout: 1000` via config variant, `Sync Manager` | log shows an error, not `null` |
 | Unknown app ID | example | `Sync Manager` with a random UUID as `APPID` | log shows "The check failed with status 404." |
@@ -246,7 +249,6 @@ Run each row on both platforms. "Log" is `scripts/example-log.sh`, "prefs" is `s
 ### Pitfalls
 
 - iOS writes user defaults when the app terminates. Run `scripts/device.sh ios force-stop` before `prefs`, or the pointer looks stale.
-- Read the whole output of `prefs`. On Android the ids of `supersededBundleIds` sit on their own lines, so a filter for the key hides them.
 - The demo does not reload a portal after its sync. Count launches: launch one downloads, launch two shows the bundle. Stop the app before each counted launch, because a launch of a running app does not sync. The iOS featured portal is created on the Shop tab at startup and needs the second launch as well.
 - The demo's cart tab has no accessibility id on Android; `demo-markers-android.yaml` taps it by position.
 - The shop of the demo shows products in a random order, so `demo-markers-ios.yaml` taps the first product card by position. Its marker checks are optional. Read the markers from the screenshots.

@@ -2,17 +2,25 @@
 # Inspect or manipulate the example app's plugin storage on a device.
 # Usage: device.sh <ios|android> <inspect|bundles|files|prefs|plant-leftover|force-stop> [simulator udid | adb serial]
 # Set APP to inspect another app, for example the Portals demo (io.ionic.portals.ecommerce / io.ionic.demo.ecommerce).
+# Set BUNDLES=provider to look at the bundles of provider managers instead of the bundles of the JS API.
 # Fails loudly when the device or the app is not reachable; only a missing directory is reported as absent.
 set -euo pipefail
 platform=$1; action=$2; device=${3:-}
 app=${APP:-com.example.plugin}
 downloads=capawesome_capacitor_live_update_downloads
+if [ "${BUNDLES:-}" = provider ]; then
+  ios_bundles=capawesome_capacitor_live_update_ionic_provider_bundles
+  android_bundles=capawesome_capacitor_live_update_ionic_provider_bundles
+else
+  ios_bundles=ionic_built_snapshots
+  android_bundles=_capacitor_live_update_bundles
+fi
 
 title_of() { grep -o '<ion-title>[^<]*</ion-title>' | head -1; }
 
 if [ "$platform" = ios ]; then
   container=$(xcrun simctl get_app_container "${device:-booted}" "$app" data)
-  bundles="$container/Library/NoCloud/ionic_built_snapshots"
+  bundles="$container/Library/NoCloud/$ios_bundles"
   cache="$container/Library/Caches"
   case $action in
     bundles) [ -d "$bundles" ] && ls "$bundles" || true ;;
@@ -32,7 +40,7 @@ else
   adb=(adb ${device:+-s "$device"})
   "${adb[@]}" shell run-as "$app" true >/dev/null 2>&1 || { echo "cannot run-as $app on ${device:-the connected device}: is the app installed and the device online?" >&2; exit 1; }
   ra() { "${adb[@]}" shell run-as "$app" "$@"; }
-  bundles=files/_capacitor_live_update_bundles
+  bundles=files/$android_bundles
   case $action in
     bundles) ra test -d $bundles && ra ls $bundles || true ;;
     files)
