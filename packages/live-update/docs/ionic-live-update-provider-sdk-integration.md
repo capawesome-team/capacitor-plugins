@@ -294,8 +294,9 @@ Bundle **seed content** at each Portal's `startDir` so the first Portal can rend
 Provider managers share the plugin's on-disk bundle storage, but keep their own state:
 
 - The state of a manager is scoped by its resolved app ID and channel (`<appId>` or `<appId>.<channel>`). Managers with the same app ID and channel share their state by design, so Portals that show the same web app share one bundle.
-- After a native app update (the version code on Android or `CFBundleVersion` on iOS changes), each manager forgets its synced bundle and serves the seed content until the next sync.
-- Bundles that were replaced by a sync, or dropped after an app update, are deleted the next time a manager is constructed (usually at app launch), not right after a sync, because a visible portal may still serve them. A bundle is kept as long as any manager points to it or it is the plugin's current or next bundle. Managers never delete bundles they did not sync themselves.
+- A manager keeps the bundle of its last sync. For a bundle of type `manifest`, the next sync only downloads the files that changed.
+- After a native app update (the version code on Android or `CFBundleVersion` on iOS changes), all managers forget their synced bundle and serve the seed content until the next sync. That also holds for a manager that is not constructed again, for example because its channel belonged to the old version.
+- Bundles that were replaced by a sync, or dropped after an app update, are deleted once per app start, when the first manager is constructed. They are not deleted right after a sync, because a visible portal may still serve them. A bundle is kept as long as any manager points to it or it is the plugin's current or next bundle. Managers never delete bundles they did not sync themselves.
 - Leftovers of interrupted downloads are removed once per process at startup. Concurrent syncs or downloads of the same bundle do not fail; the bundle counts as installed.
 
 ## Verifying updates

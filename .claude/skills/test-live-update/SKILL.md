@@ -231,7 +231,9 @@ Run each row on both platforms. "Log" is `scripts/example-log.sh`, "prefs" is `s
 | Sync unchanged | example | `Sync Manager` again | log `null`, no error |
 | State restore | example | `force-stop`, `Get Latest App Directory` with `RELAUNCH=yes` | same directory, no sync |
 | New bundle | example | upload `Provider v3`, `Sync Manager`, prefs, `force-stop`, `Get Latest App Directory` | new id; before the relaunch `supersededBundleIds` holds the old id, after it the old directory and the key are gone |
-| Native update reset | example | bump the version code, reinstall, `Get Latest App Directory` | log `null`, prefs without `lastSyncedBundleId`, old bundle deleted. Only the app ID and channel of the manager that is constructed are reset |
+| Second manager | example | after the `Sync Manager` of the row above and before the `force-stop`: `Get Latest App Directory`, which constructs a second manager in the same session | the replaced bundle folder is still there |
+| Manifest update | example | a channel with a bundle of type `manifest`, `Sync Manager`, upload a second manifest bundle with few changed files, `Sync Manager` | the log of the second sync says "Downloading N of M files." with N as the number of changed files |
+| Native update reset | example | bump the version code, reinstall, `Get Latest App Directory` | log `null`, prefs without any `lastSyncedBundleId`, the bundles of all managers deleted, also of an app ID and channel that is not constructed again |
 | Concurrent sync | example | a channel whose bundle is not on the device yet, `Sync Manager` with `TWICE=yes` | no error, both results name the same directory, one bundle directory |
 | Offline | example | `serverDomain: "10.255.255.1"` and `httpTimeout: 1000` via config variant, `Sync Manager` | log shows an error, not `null` |
 | Unknown app ID | example | `Sync Manager` with a random UUID as `APPID` | log shows "The check failed with status 404." |
