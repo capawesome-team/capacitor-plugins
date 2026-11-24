@@ -37,8 +37,6 @@ import type {
 
 const AUTO_UPDATE_MIN_INTERVAL = 15 * 60 * 1000;
 const CAPACITOR_RUNTIME = 'capacitor';
-// Platform enum of the Capawesome Cloud API: 0 = Android, 1 = iOS, 2 = Electron.
-const ELECTRON_PLATFORM = '2';
 // The built file lives at `electron/dist/plugin.mjs`, so the package root is two levels up.
 const PLUGIN_VERSION: string = createRequire(import.meta.url)(
   '../../package.json',
@@ -244,7 +242,6 @@ export class LiveUpdateElectron
       defaultChannel: this.config.defaultChannel,
       httpTimeout: this.config.httpTimeout,
       osVersion: process.getSystemVersion(),
-      platform: ELECTRON_PLATFORM,
       pluginVersion: PLUGIN_VERSION,
       publicKey: this.config.publicKey,
       readyTimeout: this.config.readyTimeout,

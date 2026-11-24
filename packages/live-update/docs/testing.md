@@ -36,6 +36,9 @@ The Electron platform has its own engine, its own storage and its own rollback a
 - [ ] Verify that a rollback is performed when `ready()` is not called within the `readyTimeout` period, in the same session and at the next start.
 - [ ] Verify that rolled back bundles are blocked from being applied again if `autoBlockRolledBackBundles` is set to true.
 - [ ] Verify that the live update fails when the wrong public key is used.
+- [ ] Verify that a signed bundle installs with a `publicKey` that is written in one line.
+- [ ] Verify that a rollback and a failed download are reported with the next update check.
+- [ ] Verify that `sync()` and `fetchLatestBundle()` resolve with no update when the server answers the update check with status 429 or 503, and that no further check is made while the wait lasts.
 - [ ] Verify that a manifest bundle is rejected.
 - [ ] Verify that `sync()` returns the custom properties of the next bundle.
 - [ ] Verify the error codes `BUNDLE_ALREADY_EXISTS`, `BUNDLE_NOT_FOUND`, `SYNC_IN_PROGRESS` and `REQUEST_FAILED`.
