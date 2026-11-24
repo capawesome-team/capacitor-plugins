@@ -1,5 +1,23 @@
 # Changelog
 
+## 8.10.0
+
+### Minor Changes
+
+- [`a9c4c7d2c7a4a03808e0b74506286034e4555d84`](https://github.com/capawesome-team/capacitor-plugins/commit/a9c4c7d2c7a4a03808e0b74506286034e4555d84) ([#1250](https://github.com/capawesome-team/capacitor-plugins/pull/1250)): feat(electron): reject `sync(...)` and `fetchLatestBundle(...)` with `REQUEST_FAILED` when the server answers the update check with an error instead of resolving with no update
+
+- [`a9c4c7d2c7a4a03808e0b74506286034e4555d84`](https://github.com/capawesome-team/capacitor-plugins/commit/a9c4c7d2c7a4a03808e0b74506286034e4555d84) ([#1250](https://github.com/capawesome-team/capacitor-plugins/pull/1250)): feat(electron): support the new update check of Capawesome Cloud and report failed updates
+
+### Patch Changes
+
+- [`6fbb74e308f40d33701c9ace151e08dab075ac43`](https://github.com/capawesome-team/capacitor-plugins/commit/6fbb74e308f40d33701c9ace151e08dab075ac43) ([#1251](https://github.com/capawesome-team/capacitor-plugins/pull/1251)): fix(android,ios): resolve `sync(...)` and `fetchLatestBundle(...)` without an update when the server answers the update check with the status 503
+
+- [`a9c4c7d2c7a4a03808e0b74506286034e4555d84`](https://github.com/capawesome-team/capacitor-plugins/commit/a9c4c7d2c7a4a03808e0b74506286034e4555d84) ([#1250](https://github.com/capawesome-team/capacitor-plugins/pull/1250)): fix(electron): read a `publicKey` that is written in one line
+
+- [`8fb0d63b54ad6f961de8713c8ba69e20f0d06fe6`](https://github.com/capawesome-team/capacitor-plugins/commit/8fb0d63b54ad6f961de8713c8ba69e20f0d06fe6) ([#1248](https://github.com/capawesome-team/capacitor-plugins/pull/1248)): fix(android,ios): resolve `ready(...)` with `rollback: false` and the stored `previousBundleId` when the ready timeout ran out while the built-in bundle was in use
+
+- [`8fb0d63b54ad6f961de8713c8ba69e20f0d06fe6`](https://github.com/capawesome-team/capacitor-plugins/commit/8fb0d63b54ad6f961de8713c8ba69e20f0d06fe6) ([#1248](https://github.com/capawesome-team/capacitor-plugins/pull/1248)): fix(android,ios): block a rolled back bundle at the rollback, so that a `sync(...)` before the next `ready(...)` call does not apply it again
+
 ## 8.9.0
 
 ### Minor Changes
