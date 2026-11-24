@@ -51,7 +51,7 @@ A bundle needs `id`, `artifactType` and an address in `url` or `legacyUrl`. `url
 | Status | Meaning for the SDK |
 |---|---|
 | 200 | The answer of the check, as described above |
-| 429 | No update. The SDK makes no further check for the number of seconds in `Retry-After`, which is a whole number that is not negative. Without such a number it waits 15 minutes. It never waits longer than 24 hours. The wait is kept in memory only, so a restart of the app always checks. |
+| 429 or 503 | No update. The SDK makes no further check for the number of seconds in `Retry-After`, which is a whole number that is not negative. Without such a number it waits 15 minutes. It never waits longer than 24 hours. The wait is kept in memory only, so a restart of the app always checks. |
 | Every other status | The check fails with the error code `REQUEST_FAILED`. |
 
 The failure that was sent with the check is removed after a 200 answer. After every other answer it stays and is sent with the next check.
@@ -116,6 +116,6 @@ Four fields of `expected` in `check-response.json` need a word:
 - `result` is the `result` of a processed answer, and `null` for every other answer.
 - `reason` is the `reason` of a skipped check as the server sent it, and `null` for every other answer.
 - `url` of `bundle` is the plain address: `url`, or else `legacyUrl`.
-- `retryAfterMs` is the wait after a 429.
+- `retryAfterMs` is the wait after a 429 or a 503.
 
 A test compares JSON bodies as values, not as text.
