@@ -8,7 +8,7 @@ The following test cases should be covered when testing the plugin:
 - [ ] Verify that no rollback is performed when the `ready()` method is called within the `readyTimeout` period.
 - [ ] Verify that the live update is still applied after restarting the app.
 - [ ] Verify that `sync()` and `fetchLatestBundle()` reject with `REQUEST_FAILED` when the server answers the update check with an error, for example with status 404 or 500.
-- [ ] Verify that `sync()` and `fetchLatestBundle()` resolve with no update when the server answers the update check with status 429, and that no further check is made while the wait lasts.
+- [ ] Verify that `sync()` and `fetchLatestBundle()` resolve with no update when the server answers the update check with status 429 or 503, and that no further check is made while the wait lasts.
 - [ ] Verify that a rollback and a failed download are reported with the next update check.
 - [ ] Verify that `ready()` reports no rollback when the `readyTimeout` period ran out while the built-in bundle was in use.
 - [ ] Verify that the correct timeout error is thrown when the server does not respond within the `timeout` period.

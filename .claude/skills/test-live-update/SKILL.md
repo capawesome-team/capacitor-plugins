@@ -106,7 +106,7 @@ Rows marked "config" need a change to `plugins.LiveUpdate` in the example config
 | Bundle already exists | | `download` of the same bundle twice | second call rejects with the code `BUNDLE_ALREADY_EXISTS` |
 | Bundle not found | | `Set Next Bundle` with an id that is not on the device | rejects with the code `BUNDLE_NOT_FOUND` |
 | Sync in progress | | two `sync` calls at the same time on a channel whose bundle is not on the device yet: on iOS `double-tap` on `Sync`, on Android `Promise.allSettled` of both calls through `webview-eval.mjs`. Two single taps are too far apart | one rejects with the code `SYNC_IN_PROGRESS`, one bundle installed |
-| Rate limit | | `tap-repeat` on `Fetch Latest Bundle` until the log shows an answer with status 429, then `sync` | no error, the log then says "No check was made because the device is rate limited." |
+| Rate limit | | `tap-repeat` on `Fetch Latest Bundle` until the log shows an answer with status 429, then `sync` | no error, the log then says "No check was made because the server asked to wait." |
 | Signature ok | `publicKey` = key A | `sync` on a channel signed with key A, `reload` | new title, clean |
 | Wrong public key | `publicKey` = key B | `sync` on the channel signed with key A | "Signature verification failed.", no bundle, clean |
 | Invalid signature | `publicKey` set | `download` of the nested ZIP with `SIGNATURE=AAAA`, `ERROR="Signature verification failed."` | toast, clean |

@@ -29,12 +29,12 @@ struct CreateCheckResponse {
         return CreateCheckResponse(bundle: nil, channelName: nil, reason: nil, result: nil, retryAfterMs: nil)
     }
 
-    /// - Throws: `CustomError.requestFailed` for every status other than 200 and 429.
+    /// - Throws: `CustomError.requestFailed` for every status other than 200, 429 and 503.
     static func parse(statusCode: Int, retryAfter: String?, body: String?) throws -> CreateCheckResponse {
         switch statusCode {
         case 200:
             return parseBody(body)
-        case 429:
+        case 429, 503:
             return CreateCheckResponse(bundle: nil, channelName: nil, reason: nil, result: nil,
                                        retryAfterMs: parseRetryAfterMs(retryAfter))
         default:

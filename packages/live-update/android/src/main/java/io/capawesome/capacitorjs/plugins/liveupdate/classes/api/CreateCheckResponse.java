@@ -73,11 +73,11 @@ public class CreateCheckResponse {
     }
 
     /**
-     * @throws CustomException With the code `REQUEST_FAILED` for every status other than 200 and 429.
+     * @throws CustomException With the code `REQUEST_FAILED` for every status other than 200, 429 and 503.
      */
     @NonNull
     public static CreateCheckResponse parse(int statusCode, @Nullable String retryAfter, @NonNull String body) throws CustomException {
-        if (statusCode == 429) {
+        if (statusCode == 429 || statusCode == 503) {
             CreateCheckResponse response = new CreateCheckResponse();
             response.retryAfterMs = parseRetryAfterMs(retryAfter);
             return response;
