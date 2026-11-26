@@ -320,6 +320,9 @@ is set to `manual`.
 **Attention**: The Node.js runtime can only be started once per app
 launch. Stopping and restarting the Node.js runtime is not supported.
 
+On Android, the Node.js runtime keeps running when the activity is
+recreated. A call then rejects with `NODE_ALREADY_RUNNING`.
+
 Only available on Android and iOS.
 
 | Param         | Type                                                  |

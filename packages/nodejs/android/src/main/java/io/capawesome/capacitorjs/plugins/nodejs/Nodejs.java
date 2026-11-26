@@ -37,7 +37,11 @@ public class Nodejs {
     private static final String SYSTEM_MESSAGE_RESUME = "resume";
 
     @Nullable
-    private static Nodejs instance;
+    private static volatile Nodejs instance;
+
+    private static volatile boolean ready = false;
+
+    private static volatile boolean started = false;
 
     static {
         System.loadLibrary("node");
@@ -53,10 +57,6 @@ public class Nodejs {
     @NonNull
     private final NodejsPlugin plugin;
 
-    private volatile boolean ready = false;
-
-    private volatile boolean started = false;
-
     public Nodejs(@NonNull NodejsPlugin plugin, @NonNull Context context, @NonNull NodejsConfig config) {
         this.config = config;
         this.context = context;
@@ -66,6 +66,10 @@ public class Nodejs {
 
     public boolean isReady() {
         return ready;
+    }
+
+    public boolean isStarted() {
+        return started;
     }
 
     public void send(@NonNull SendOptions options) throws Exception {
@@ -78,12 +82,14 @@ public class Nodejs {
         sendMessageToNodeChannel(CHANNEL_EVENTS, envelope.toString());
     }
 
-    public synchronized void start(@NonNull StartOptions options, @NonNull EmptyCallback callback) {
-        if (started) {
-            callback.error(CustomExceptions.NODE_ALREADY_RUNNING);
-            return;
+    public void start(@NonNull StartOptions options, @NonNull EmptyCallback callback) {
+        synchronized (Nodejs.class) {
+            if (started) {
+                callback.error(CustomExceptions.NODE_ALREADY_RUNNING);
+                return;
+            }
+            started = true;
         }
-        started = true;
         Thread thread = new Thread(() -> {
             try {
                 File projectDir = new File(getBaseDir(), "nodejs-project");

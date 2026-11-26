@@ -34,7 +34,11 @@ public class NodejsPlugin extends Plugin {
     public void load() {
         config = getNodejsConfig();
         implementation = new Nodejs(this, getContext(), config);
-        if (START_MODE_AUTO.equals(config.getStartMode())) {
+        if (implementation.isReady()) {
+            // The runtime signals that it is ready only once per process.
+            notifyReadyListeners();
+        }
+        if (START_MODE_AUTO.equals(config.getStartMode()) && !implementation.isStarted()) {
             implementation.start(
                 new StartOptions(),
                 new EmptyCallback() {
