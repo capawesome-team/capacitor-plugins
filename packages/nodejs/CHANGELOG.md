@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- [`a0505aa57e1627e5701d6fa14a9eaaa08cd74ef9`](https://github.com/capawesome-team/capacitor-plugins/commit/a0505aa57e1627e5701d6fa14a9eaaa08cd74ef9) ([#1252](https://github.com/capawesome-team/capacitor-plugins/pull/1252)): fix(android): start the Node.js runtime only once per process
+
 ## 0.3.0
 
 ### Minor Changes
