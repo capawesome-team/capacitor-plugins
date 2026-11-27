@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.3
+
+### Patch Changes
+
+- [`9475516d597a25ac5d83dce25250d4e811a1a897`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9475516d597a25ac5d83dce25250d4e811a1a897) ([#720](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/720)): feat(android): add the `oldProductId` and `replacementMode` options to `purchaseProduct(...)`
+
 ## 0.4.2
 
 ### Patch Changes
