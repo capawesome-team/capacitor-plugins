@@ -113,7 +113,7 @@ No configuration required for this plugin.
 
 ## Usage
 
-The following examples show how to purchase a product and restore previous purchases.
+The following examples show how to purchase a product, replace a subscription and restore previous purchases.
 
 ### Purchase a product
 
@@ -132,6 +132,28 @@ const purchaseProduct = async (productId: string) => {
   // await Purchases.finishTransaction({ transactionId: transaction.id, isConsumable: true });
 };
 ```
+
+### Replace a subscription
+
+Let a user upgrade or downgrade from a subscription they already own. On Android, set `oldProductId` to the product ID of the owned subscription. Use `replacementMode` to choose how it is replaced. On iOS, both options are ignored, because the App Store replaces a subscription of the same subscription group on its own:
+
+```typescript
+import { Purchases, ReplacementMode } from '@capawesome-team/capacitor-purchases';
+
+const upgradeSubscription = async () => {
+  const { transaction } = await Purchases.purchaseProduct({
+    productId: 'premium',
+    oldProductId: 'basic',
+    replacementMode: ReplacementMode.ChargeProratedPrice,
+  });
+  // Enable the service here
+  // ...
+  // Finish the transaction
+  await Purchases.finishTransaction({ transactionId: transaction.id });
+};
+```
+
+With `ReplacementMode.Deferred`, the new subscription starts when the old one renews. Until then, the transaction carries a new `token` and the product ID of the old subscription. Finish this transaction like any other.
 
 ### Restore previous purchases
 
@@ -604,15 +626,17 @@ A pricing phase of a subscription offer.
 
 #### PurchaseProductOptions
 
-| Prop                      | Type                                                        | Description                                                                                                                                                                                                                                                                             | Since |
-| ------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`appAccountToken`**     | <code>string</code>                                         | A UUID string that associates the purchase with an account in your system. Apple returns it with the transaction, in the App Store Server API and in App Store Server Notifications. Generate a UUID per account instead of using a raw user identifier. Only available on iOS.         | 0.4.2 |
-| **`basePlanId`**          | <code>string</code>                                         | The base plan ID of the subscription to purchase. Only available on Android.                                                                                                                                                                                                            | 0.3.5 |
-| **`obfuscatedAccountId`** | <code>string</code>                                         | An obfuscated identifier that is uniquely associated with the user's account in your app. Google Play returns it with the purchase and in the Google Play Developer API. Use a one-way hash instead of a raw user identifier. Must not exceed 64 characters. Only available on Android. | 0.4.2 |
-| **`obfuscatedProfileId`** | <code>string</code>                                         | An obfuscated identifier that is uniquely associated with the user's profile in your app, for apps where one account can hold several profiles. Use a one-way hash instead of a raw user identifier. Must not exceed 64 characters. Only available on Android.                          | 0.4.2 |
-| **`offerId`**             | <code>string</code>                                         | The offer ID of the subscription offer to purchase. Only available on Android.                                                                                                                                                                                                          | 0.3.5 |
-| **`planType`**            | <code><a href="#billingplantype">BillingPlanType</a></code> | The billing plan type to purchase for a monthly-with-12-month-commitment auto-renewable subscription. Only available on iOS (26.4+).                                                                                                                                                    | 0.3.8 |
-| **`productId`**           | <code>string</code>                                         | The product ID of the product to purchase. On **Android**, this is the <a href="#product">Product</a> ID configured in Google Play Console. On **iOS**, this is the <a href="#product">Product</a> ID configured in App Store Connect.                                                  | 0.1.0 |
+| Prop                      | Type                                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                | Since |
+| ------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`appAccountToken`**     | <code>string</code>                                         | A UUID string that associates the purchase with an account in your system. Apple returns it with the transaction, in the App Store Server API and in App Store Server Notifications. Generate a UUID per account instead of using a raw user identifier. Only available on iOS.                                                                                                                                            | 0.4.2 |
+| **`basePlanId`**          | <code>string</code>                                         | The base plan ID of the subscription to purchase. Only available on Android.                                                                                                                                                                                                                                                                                                                                               | 0.3.5 |
+| **`obfuscatedAccountId`** | <code>string</code>                                         | An obfuscated identifier that is uniquely associated with the user's account in your app. Google Play returns it with the purchase and in the Google Play Developer API. Use a one-way hash instead of a raw user identifier. Must not exceed 64 characters. Only available on Android.                                                                                                                                    | 0.4.2 |
+| **`obfuscatedProfileId`** | <code>string</code>                                         | An obfuscated identifier that is uniquely associated with the user's profile in your app, for apps where one account can hold several profiles. Use a one-way hash instead of a raw user identifier. Must not exceed 64 characters. Only available on Android.                                                                                                                                                             | 0.4.2 |
+| **`offerId`**             | <code>string</code>                                         | The offer ID of the subscription offer to purchase. Only available on Android.                                                                                                                                                                                                                                                                                                                                             | 0.3.5 |
+| **`oldProductId`**        | <code>string</code>                                         | The product ID of the subscription that this purchase replaces. Set this to let the user upgrade or downgrade from a subscription they already own. The call is rejected if the user does not own it. If that subscription was purchased with an `obfuscatedAccountId`, pass the same value again. On **iOS**, the App Store replaces a subscription of the same subscription group on its own. Only available on Android. | 0.4.3 |
+| **`planType`**            | <code><a href="#billingplantype">BillingPlanType</a></code> | The billing plan type to purchase for a monthly-with-12-month-commitment auto-renewable subscription. Only available on iOS (26.4+).                                                                                                                                                                                                                                                                                       | 0.3.8 |
+| **`productId`**           | <code>string</code>                                         | The product ID of the product to purchase. On **Android**, this is the <a href="#product">Product</a> ID configured in Google Play Console. On **iOS**, this is the <a href="#product">Product</a> ID configured in App Store Connect.                                                                                                                                                                                     | 0.1.0 |
+| **`replacementMode`**     | <code><a href="#replacementmode">ReplacementMode</a></code> | How the subscription set in `oldProductId` is replaced. Ignored if `oldProductId` is not set. If not set, Google Play applies its default replacement mode. Only available on Android.                                                                                                                                                                                                                                     | 0.4.3 |
 
 
 ### Enums
@@ -662,6 +686,17 @@ A pricing phase of a subscription offer.
 | ------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------- | ----- |
 | **`InApp`**        | <code>'IN_APP'</code>       | In-app products (consumables and non-consumables). On Android, this maps to `BillingClient.ProductType.INAPP`. | 0.3.3 |
 | **`Subscription`** | <code>'SUBSCRIPTION'</code> | Subscription products. On Android, this maps to `BillingClient.ProductType.SUBS`.                              | 0.3.3 |
+
+
+#### ReplacementMode
+
+| Members                   | Value                                | Description                                                                                                                                                                                                                                   | Since |
+| ------------------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`ChargeFullPrice`**     | <code>'CHARGE_FULL_PRICE'</code>     | The new subscription starts immediately and the user is charged its full price. The remaining value of the old subscription is credited.                                                                                                      | 0.4.3 |
+| **`ChargeProratedPrice`** | <code>'CHARGE_PRORATED_PRICE'</code> | The new subscription starts immediately and the billing date stays the same. The user is charged the price difference for the rest of the billing period. Only allowed for an upgrade to a subscription with a higher price per unit of time. | 0.4.3 |
+| **`Deferred`**            | <code>'DEFERRED'</code>              | The new subscription starts when the old subscription renews. Until then, the returned transaction and `getCurrentTransactions()` carry a new `token` and the product ID of the old subscription.                                             | 0.4.3 |
+| **`WithoutProration`**    | <code>'WITHOUT_PRORATION'</code>     | The new subscription starts immediately and the billing date stays the same. The new price is charged when the subscription renews.                                                                                                           | 0.4.3 |
+| **`WithTimeProration`**   | <code>'WITH_TIME_PRORATION'</code>   | The new subscription starts immediately. The remaining time of the old subscription is adjusted for the price difference and credited by moving the next billing date.                                                                        | 0.4.3 |
 
 </docgen-api>
 
