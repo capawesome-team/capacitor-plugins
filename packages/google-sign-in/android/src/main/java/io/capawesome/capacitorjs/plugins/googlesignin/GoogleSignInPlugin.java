@@ -17,8 +17,10 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.google.android.gms.auth.api.identity.AuthorizationResult;
 import com.google.android.gms.auth.api.identity.Identity;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.CustomException;
+import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.AuthorizeOptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.InitializeOptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.SignInOptions;
+import io.capawesome.capacitorjs.plugins.googlesignin.classes.results.AuthorizeResult;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.results.SignInResult;
 import io.capawesome.capacitorjs.plugins.googlesignin.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.googlesignin.interfaces.NonEmptyResultCallback;
@@ -30,8 +32,8 @@ public class GoogleSignInPlugin extends Plugin {
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     public static final String TAG = "GoogleSignInPlugin";
 
-    private GoogleSignIn implementation;
     private ActivityResultLauncher<IntentSenderRequest> authorizationLauncher;
+    private GoogleSignIn implementation;
 
     @Override
     public void load() {
@@ -41,6 +43,32 @@ public class GoogleSignInPlugin extends Plugin {
             new ActivityResultContracts.StartIntentSenderForResult(),
             this::handleAuthorizationActivityResult
         );
+    }
+
+    @PluginMethod
+    public void authorize(PluginCall call) {
+        try {
+            AuthorizeOptions options = new AuthorizeOptions(call);
+            NonEmptyResultCallback<AuthorizeResult> callback = new NonEmptyResultCallback<>() {
+                @Override
+                public void success(@NonNull AuthorizeResult result) {
+                    resolveCall(call, result);
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+            implementation.authorize(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void handleRedirectCallback(PluginCall call) {
+        rejectCallAsUnimplemented(call);
     }
 
     @PluginMethod
@@ -62,6 +90,11 @@ public class GoogleSignInPlugin extends Plugin {
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
+    }
+
+    public void launchAuthorizationIntent(@NonNull PendingIntent pendingIntent) {
+        IntentSenderRequest request = new IntentSenderRequest.Builder(pendingIntent).build();
+        authorizationLauncher.launch(request);
     }
 
     @PluginMethod
@@ -86,11 +119,6 @@ public class GoogleSignInPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void handleRedirectCallback(PluginCall call) {
-        rejectCallAsUnimplemented(call);
-    }
-
-    @PluginMethod
     public void signOut(PluginCall call) {
         try {
             EmptyCallback callback = new EmptyCallback() {
@@ -110,11 +138,6 @@ public class GoogleSignInPlugin extends Plugin {
         }
     }
 
-    public void launchAuthorizationIntent(@NonNull PendingIntent pendingIntent) {
-        IntentSenderRequest request = new IntentSenderRequest.Builder(pendingIntent).build();
-        authorizationLauncher.launch(request);
-    }
-
     private void handleAuthorizationActivityResult(@NonNull ActivityResult result) {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
             try {
@@ -130,10 +153,6 @@ public class GoogleSignInPlugin extends Plugin {
         }
     }
 
-    private void rejectCallAsUnimplemented(@NonNull PluginCall call) {
-        call.unimplemented("This method is not available on this platform.");
-    }
-
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {
         String message = exception.getMessage();
         if (message == null) {
@@ -146,6 +165,10 @@ public class GoogleSignInPlugin extends Plugin {
         } else {
             call.reject(message, code);
         }
+    }
+
+    private void rejectCallAsUnimplemented(@NonNull PluginCall call) {
+        call.unimplemented("This method is not available on this platform.");
     }
 
     private void resolveCall(@NonNull PluginCall call) {
